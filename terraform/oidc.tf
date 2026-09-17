@@ -30,10 +30,10 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
     }
 
     condition {
-      test     = "StringLike"
+      test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
-        "repo:bellcloudtech/aws-terraform-github-actions-cicd:*"
+        "repo:bellcloudtech@265093900/aws-terraform-github-actions-cicd@1374241423:ref:refs/heads/main"
       ]
     }
   }
