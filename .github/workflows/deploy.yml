@@ -30,8 +30,20 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Display safe OIDC claim details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const token = await core.getIDToken('sts.amazonaws.com');
+            const payload = JSON.parse(
+              Buffer.from(token.split('.')[1], 'base64url').toString()
+            );
+            core.info(`OIDC issuer: ${payload.iss}`);
+            core.info(`OIDC audience: ${payload.aud}`);
+            core.info(`OIDC subject: ${payload.sub}`);
+
       - name: Authenticate to AWS using OIDC
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
